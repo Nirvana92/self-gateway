@@ -1,7 +1,9 @@
 package org.nirvana.server.autoconfig;
 
+import org.nirvana.entity.Route;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author gzm
@@ -14,6 +16,6 @@ public class SelfGatewayProperties {
      * 前缀
      */
     private String prefix;
-
-    // private Map<String, Route> routes = new HashMap<>();
+    // 路由规则
+    private Map<String, Route> routes = new HashMap<>();
 }
