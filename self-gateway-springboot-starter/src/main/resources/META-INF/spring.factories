@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.nirvana.server.config.SelfGatewayAutoConfiguration
+org.nirvana.server.autoconfig.SelfGatewayAutoConfiguration
