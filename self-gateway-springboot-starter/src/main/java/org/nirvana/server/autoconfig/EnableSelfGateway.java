@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(SelfGatewayAutoConfiguration.class)
+@Import(SelfGatewayServerMarkerConfiguration.class)
 public @interface EnableSelfGateway {
 }

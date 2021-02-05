@@ -3,9 +3,11 @@ package org.nirvana.server.autoconfig;
 import org.nirvana.server.filter.SelfGatewayServletFilter;
 import org.nirvana.server.rule.RouteLocator;
 import org.nirvana.server.rule.SimpleRouteLocator;
+import org.nirvana.server.service.ServiceRegister;
 import org.nirvana.server.service.SimpleServiceLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -54,5 +56,14 @@ public class SelfGatewayAutoConfiguration {
     public ScheduledExecutorService threadPools() {
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(10);
         return threadPool;
+    }
+
+    /**
+     * 注册当前的服务信息到配置中心: 抽离配置中心的处理方法的时候可以通过抽离一个接口。 然后通过接口控制具体的实现
+     * @return
+     */
+    @Bean
+    public ServiceRegister serviceRegister() {
+        return new ServiceRegister();
     }
 }

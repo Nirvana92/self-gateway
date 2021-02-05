@@ -32,7 +32,7 @@ public class SelfGatewayServletFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logger.info("初始化方法执行");
+        logger.info(" 整个网关的全局过滤器 ");
     }
 
     @Override
