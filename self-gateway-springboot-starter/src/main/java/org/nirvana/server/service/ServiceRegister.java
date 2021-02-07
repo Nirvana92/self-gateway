@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import org.apache.commons.lang3.StringUtils;
+import org.nirvana.util.IpUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -35,6 +36,7 @@ public class ServiceRegister implements ApplicationListener<ContextRefreshedEven
         if(StringUtils.isNumeric(port)) {
             instance.setPort(Integer.parseInt(port));
         }
+        instance.setIp(IpUtils.getLocalIpAddress());
 
         try {
             namingService.registerInstance(applicationName, instance);
