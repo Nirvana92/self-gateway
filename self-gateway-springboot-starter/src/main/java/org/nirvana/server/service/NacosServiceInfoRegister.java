@@ -18,7 +18,7 @@ import org.springframework.core.env.Environment;
  * @date 2021/2/3 5:20 下午
  * @desc: 将本地的服务注册到服务注册中心
  */
-public class ServiceRegister implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
+public class NacosServiceInfoRegister implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     @NacosInjected
     private NamingService namingService;

@@ -3,20 +3,17 @@ package org.nirvana.server.autoconfig;
 import org.nirvana.server.filter.SelfGatewayServletFilter;
 import org.nirvana.server.rule.RouteLocator;
 import org.nirvana.server.rule.SimpleRouteLocator;
-import org.nirvana.server.service.ServiceRegister;
+import org.nirvana.server.service.NacosServiceInfoRegister;
 import org.nirvana.server.service.SimpleServiceLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author gzm
@@ -41,8 +38,8 @@ public class SelfGatewayAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SimpleRouteLocator.class)
-    public SimpleRouteLocator simpleRouteLocator() {
-        return new SimpleRouteLocator(selfGatewayProperties);
+    public SimpleRouteLocator simpleRouteLocator(ScheduledExecutorService threadPools) {
+        return new SimpleRouteLocator(threadPools, selfGatewayProperties);
     }
 
     @Bean
@@ -63,7 +60,7 @@ public class SelfGatewayAutoConfiguration {
      * @return
      */
     @Bean
-    public ServiceRegister serviceRegister() {
-        return new ServiceRegister();
+    public NacosServiceInfoRegister serviceRegister() {
+        return new NacosServiceInfoRegister();
     }
 }
