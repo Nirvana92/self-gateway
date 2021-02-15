@@ -4,7 +4,7 @@ import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.api.naming.pojo.ListView;
 import org.nirvana.service.ServiceInstanceMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class SimpleServiceLocator implements ServiceLocator {
 
         logger.info(" 启动定时任务 获取服务列表. {}", namingService);
 
-        threadPool.scheduleWithFixedDelay(()-> {
+        threadPool.scheduleWithFixedDelay(() -> {
             // 去服务注册中心刷新服务
             logger.info("开始拉取服务列表");
             ListView<String> services = null;
@@ -54,7 +54,7 @@ public class SimpleServiceLocator implements ServiceLocator {
                 for (String serviceName : services.getData()) {
                     // logger.info("服务信息: {}", service);
                     List<Instance> instances = namingService.getAllInstances(serviceName);
-                    if(!CollectionUtils.isEmpty(instances)) {
+                    if (!CollectionUtils.isEmpty(instances)) {
                         // 更新本地缓存中的服务数据
                         List<ServiceInstanceMetadata> instanceMetadatas = new ArrayList<>();
                         instances.forEach(instance -> {
