@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,7 +40,7 @@ public class SimpleServiceLocator implements ServiceLocator {
 
     public SimpleServiceLocator(ScheduledExecutorService threadPool) {
         this.threadPool = threadPool;
-
+        serviceInstanceMaps.set(new HashMap<>());
         logger.info(" 启动定时任务 获取服务列表. {}", namingService);
 
         threadPool.scheduleWithFixedDelay(() -> {
@@ -52,8 +53,9 @@ public class SimpleServiceLocator implements ServiceLocator {
                 // 获取服务名,  这种可以循环往后分区获取
                 services = namingService.getServicesOfServer(0, 100);
                 for (String serviceName : services.getData()) {
-                    // logger.info("服务信息: {}", service);
+                    logger.info("服务信息: {}", serviceName);
                     List<Instance> instances = namingService.getAllInstances(serviceName);
+                    // logger.info(serviceName + " instances: " + instances.size());
                     if (!CollectionUtils.isEmpty(instances)) {
                         // 更新本地缓存中的服务数据
                         List<ServiceInstanceMetadata> instanceMetadatas = new ArrayList<>();
@@ -65,8 +67,9 @@ public class SimpleServiceLocator implements ServiceLocator {
 
                             instanceMetadatas.add(instanceMetadata);
                         });
-
+                        logger.info(" instanceMetadatas: " + instanceMetadatas + ", maps: " + serviceInstanceMaps.get());
                         serviceInstanceMaps.get().put(serviceName, instanceMetadatas);
+                        logger.info("刷新的服务实例元数据信息: " + serviceInstanceMaps);
                     }
                 }
             } catch (NacosException e) {

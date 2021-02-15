@@ -30,4 +30,12 @@ public class Route {
     public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "path='" + path + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                '}';
+    }
 }

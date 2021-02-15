@@ -58,4 +58,13 @@ public class ServiceInstanceMetadata {
     public int hashCode() {
         return Objects.hash(host, port);
     }
+
+    @Override
+    public String toString() {
+        return "ServiceInstanceMetadata{" +
+                "serviceName='" + serviceName + '\'' +
+                ", host='" + host + '\'' +
+                ", port=" + port +
+                '}';
+    }
 }
