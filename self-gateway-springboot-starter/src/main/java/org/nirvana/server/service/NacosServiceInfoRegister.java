@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import org.apache.commons.lang3.StringUtils;
+import org.nirvana.util.IpUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -17,7 +18,7 @@ import org.springframework.core.env.Environment;
  * @date 2021/2/3 5:20 下午
  * @desc: 将本地的服务注册到服务注册中心
  */
-public class ServiceRegister implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
+public class NacosServiceInfoRegister implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
     @NacosInjected
     private NamingService namingService;
@@ -35,6 +36,7 @@ public class ServiceRegister implements ApplicationListener<ContextRefreshedEven
         if(StringUtils.isNumeric(port)) {
             instance.setPort(Integer.parseInt(port));
         }
+        instance.setIp(IpUtils.getLocalIpAddress());
 
         try {
             namingService.registerInstance(applicationName, instance);

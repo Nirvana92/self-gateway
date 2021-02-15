@@ -3,7 +3,7 @@ package org.nirvana.server.autoconfig;
 import org.nirvana.server.filter.SelfGatewayServletFilter;
 import org.nirvana.server.rule.RouteLocator;
 import org.nirvana.server.rule.SimpleRouteLocator;
-import org.nirvana.server.service.ServiceRegister;
+import org.nirvana.server.service.NacosServiceInfoRegister;
 import org.nirvana.server.service.SimpleServiceLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -38,8 +38,8 @@ public class SelfGatewayAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SimpleRouteLocator.class)
-    public SimpleRouteLocator simpleRouteLocator() {
-        return new SimpleRouteLocator(selfGatewayProperties);
+    public SimpleRouteLocator simpleRouteLocator(ScheduledExecutorService threadPools) {
+        return new SimpleRouteLocator(threadPools, selfGatewayProperties);
     }
 
     @Bean
@@ -60,7 +60,7 @@ public class SelfGatewayAutoConfiguration {
      * @return
      */
     @Bean
-    public ServiceRegister serviceRegister() {
-        return new ServiceRegister();
+    public NacosServiceInfoRegister serviceRegister() {
+        return new NacosServiceInfoRegister();
     }
 }
