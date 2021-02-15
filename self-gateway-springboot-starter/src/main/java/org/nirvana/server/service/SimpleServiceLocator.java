@@ -3,15 +3,13 @@ package org.nirvana.server.service;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.alibaba.nacos.api.naming.pojo.ListView;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import org.nirvana.service.ServiceInstanceMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,10 +29,10 @@ public class SimpleServiceLocator implements ServiceLocator {
     // 初始化的延迟时间
     private Long initialDelay = 1000 * 1L;
     // 往后每次的间隔延迟
-    private Long delay = 1000 * 5L;
+    private Long delay = 1000 * 20L;
 
     @NacosInjected
-    private NamingService namingService;
+    NamingService namingService;
 
     public SimpleServiceLocator(ScheduledExecutorService threadPool) {
         this.threadPool = threadPool;
@@ -43,14 +41,16 @@ public class SimpleServiceLocator implements ServiceLocator {
 
         threadPool.scheduleWithFixedDelay(()-> {
             // 去服务注册中心刷新服务
-            logger.info("开始拉取服务列表");
-            ListView<String> defaultGroupServices = null;
+            logger.info("开始拉取服务列表. namingService: {}", namingService);
 
             try {
-                defaultGroupServices = namingService.getServicesOfServer(0, 10, "DEFAULT_GROUP");
-                for (String service : defaultGroupServices.getData()) {
-                    logger.info("服务信息: {}", service);
-                }
+                // List<Instance> instances = namingService.getAllInstances("service-server", "DEFAULT_GROUP");
+                List<Instance> instances = namingService.getAllInstances("service-server");
+
+                instances.forEach(instance -> {
+                    logger.info("--------------------------------------------------------");
+                    logger.info(" serviceName={}, port={}", instance.getServiceName(), instance.getPort());
+                });
             } catch (NacosException e) {
                 e.printStackTrace();
             }
